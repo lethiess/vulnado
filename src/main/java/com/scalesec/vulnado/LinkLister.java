@@ -10,9 +10,9 @@ import java.io.IOException;
 import java.util.logging.Logger;
 import java.net.*;
 
-
-  private LinkLister() {}
 public class LinkLister {
+  private LinkLister() {} // Moved inside the class definition
+
   public static List<String> getLinks(String url) throws IOException {
     List<String> result = new ArrayList<>();
     Document doc = Jsoup.connect(url).get();
@@ -25,17 +25,24 @@ public class LinkLister {
 
   public static List<String> getLinksV2(String url) throws BadRequest {
     try {
-      URL aUrl= new URL(url);
+      URL aUrl = new URL(url);
       String host = aUrl.getHost();
       Logger logger = Logger.getLogger(LinkLister.class.getName());
       logger.info(host);
-      if (host.startsWith("172.") || host.startsWith("192.168") || host.startsWith("10.")){
+      if (host.startsWith("172.") || host.startsWith("192.168") || host.startsWith("10.")) {
         throw new BadRequest("Use of Private IP");
       } else {
         return getLinks(url);
       }
-    } catch(Exception e) {
+    } catch (Exception e) {
       throw new BadRequest(e.getMessage());
     }
+  }
+}
+
+// Define the custom BadRequest exception
+class BadRequest extends Exception {
+  public BadRequest(String message) {
+    super(message);
   }
 }

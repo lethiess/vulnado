@@ -23,19 +23,48 @@ public class CommentsController {
   @CrossOrigin(origins = "*")
   @PostMapping(value = "/comments", produces = "application/json", consumes = "application/json")
   Comment createComment(@RequestHeader(value="x-auth-token") String token, @RequestBody CommentRequest input) {
+    User.assertAuth(secret, token); // Ensure authentication
+    if (input == null || input.username == null || input.username.isEmpty() || input.body == null || input.body.isEmpty()) {
+      throw new BadRequest("Invalid input: username and body are required.");
+    }
     return Comment.create(input.username, input.body);
   }
 
   @CrossOrigin(origins = "*")
   @DeleteMapping(value = "/comments/{id}", produces = "application/json")
   Boolean deleteComment(@RequestHeader(value="x-auth-token") String token, @PathVariable("id") String id) {
-    return Comment.delete(id);
+    User.assertAuth(secret, token); // Ensure authentication
+    if (id == null || id.isEmpty()) {
+      throw new BadRequest("Invalid comment ID.");
+    }
+    boolean result = Comment.delete(id);
+    if (!result) {
+      throw new BadRequest("Comment not found or could not be deleted.");
+    }
+    return result;
   }
 }
 
 class CommentRequest implements Serializable {
   private String username;
   private String body;
+
+  // Add getters and setters for proper deserialization
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getBody() {
+    return body;
+  }
+
+  public void setBody(String body) {
+    this.body = body;
+  }
 }
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
