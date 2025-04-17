@@ -241,8 +241,8 @@ jobs:
         with:
           commit-message: "AI Impact documentation and Unit Tests"
           title: "Documentation and Unit Tests created by AI Impact"
-          body: "Pull request created by IA Impact CodeDocumenter and CodeTester."
-          branch: "tester-by-ai"
+          body: "Pull request created by AI Impact CodeDocumenter and CodeTester."
+          branch: "pr-by-ai-impact"
           delete-branch: true
           add-paths: |
               ./**/*.java
