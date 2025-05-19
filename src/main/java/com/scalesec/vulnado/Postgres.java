@@ -9,8 +9,11 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.UUID;
 
+    private Postgres() {
 public class Postgres {
+        throw new UnsupportedOperationException("Utility class");
 
+    }
     public static Connection connection() {
         try {
             Class.forName("org.postgresql.Driver");
